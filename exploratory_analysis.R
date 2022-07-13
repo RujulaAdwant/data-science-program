@@ -1,8 +1,3 @@
-#### Load in CSV file ####
-spotify_ds <- read.csv("data/spotify_dataset.csv")
-View(spotify_ds)
-
-
 # Practice plotting with your dataset
 library(ggplot2)
 ggplot(data = spotify_ds, aes(x = Popularity)) + 
@@ -18,6 +13,3 @@ ggplot(data = spotify_ds, aes(x = Number.of.Times.Charted)) +
 
 #ggplot(data = spotify_ds, aes(x = Highest.Charting.Position, y = Number.of.Times.Charted))+
 #  geom_line()
-
-
-  

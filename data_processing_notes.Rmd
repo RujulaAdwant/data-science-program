@@ -1,0 +1,19 @@
+---
+title: "data_processing_notes"
+author: "Rujula Adwant"
+date: '2022-07-13'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Introduction to dplyr
+
+dplyr is an R package in the tidyverse. *We can load the package using*
+
+``` {r}
+#library(dplyr)
+
+```
