@@ -14,6 +14,159 @@ knitr::opts_chunk$set(echo = TRUE)
 dplyr is an R package in the tidyverse. *We can load the package using*
 
 ``` {r}
-#library(dplyr)
+
+install.packages("dplyr")
+
+#load required libraries
+library(dplyr)
+library(ggplot2)
+
+#preview dataset
+View(starwars)
+head(starwars)
+
+
+```
+
+#### Filtering data 
+We can filter data using `filter()`
+
+Tips:
+* Be sure you spell the column name correctly (and the value name if it's a categorical variable). Remember, R is case-sensitive.
+* Be sure to use a double equal sign when comparing observations; `=` is an assignment operator
+* You can use >, <, >=, <= to compare numeric or categorical variables (nominal variables are ranked alphabetically while ordinal variables have a built-in rank)
+
+``` {r}
+
+filter(starwars, hair_color == "blond")
+filter(starwars, hair_color == "blond" & species == "Human")
+filter(starwars, species == "Human", homeworld == "Tatooine", skin_color == "fair")
+
+filteredData <- filter(starwars, species == "Human", homeworld == "Tatooine")
+
+filter(starwars, skin_color == "gold" & height >= 150)
+
+
+importantPlanets <- c("Tatooine", "Naboo", "Hoth")
+filter(starwars, homeworld %in% importantPlanets)
+# %in% is IMPORTANT
+
+# ranked data
+head(diamonds) #displays six rows
+class(diamonds$cut) #gives you the specific type of data
+summary(diamonds$cut) #gives you a count of each category or summary statistics if numeric
+summary(diamonds$carat)
+head(diamonds$cut) # < - displays first 6 values and levels
+
+filter(diamonds, cut > "Good")
+
+# Ordering categorical data
+unique(starwars$eye_color)
+factor(starwars$eye_color,
+       c("red", "orange", "gold", "yellow", "green,yellow", "blue", "black"), 
+         ordered = T)
+       
+filter(starwars, height < 100, species != "Droid")
+
+#Which characters were born in between the years 100 and 200 (inclusive)
+filter(starwars, birth_year <= 200, birth_year >= 100)
+
+## Which characters weight over 100kg but are shorter than 185cm
+filter(starwars, mass > 100 & height < 185)
+
+### Missing values 
+NA > 5 # it doesn't know
+NA == NA
+
+?is.na()
+
+
+mary_age <- NA
+paul_age <- NA
+mary_age == paul_age
+
+mass <- NA
+mass == 10
+10 == NA
+
+is.na(mass)
+
+#### to add NA values, you need to explicitly include them with is.na()
+
+##Which characters are missing a hair color?
+filter(starwars, is.na(hair_color))
+
+
+```
+
+### Arranging data
+`arrange()` reorders rows. It does not remove any rows.
+
+
+```{r}
+
+arrange(starwars, birth_year)
+
+arrange(starwars, desc(birth_year))
+
+### Practice!
+## arrange characters to find tallest and shortest
+
+arrange(starwars, height)
+
+# alphabetize by name
+arrange(starwars, name)
+
+## How could you use arrange to sort all missing values to the start?
+arrange(starwars, desc(is.na(starwars))) #continue for other variables
+
+
+```
+
+### We can select certain columns in the dataset
+`select()` allows us to retain certain variables (columns)
+doesn't change order but removes columns not named
+
+``` {r}
+
+select(starwars, hair_color)
+head(starwars)
+select(starwars, hair_color:eye_color) # returns every column between first:last, including first:last
+
+select(starwars, -hair_color)
+select(starwars, -(hair_color:eye_color))
+
+select(starwars, contains("color")) # keeps every column w color
+select(starwars, ends_with("color")) # keeps every column that ends with
+
+
+## Practice!!
+
+## Select out the homeworld and species for the starwars dataset. What question might this subset of variables help answer?
+
+select(starwars, homeworld, species)
+
+## Brainstorm as many ways as possible to select hair_color, eye_color, skin_color, and birth_year
+
+select(starwars, hair_color:birth_year)
+```
+
+### Adding new columns
+`mutate()` adds new columns to the end of your dataset
+
+```{r}
+
+starwars_small <- select(starwars, height, mass, birth_year)
+starwars_small
+head(starwars_small)
+
+starwars_small <- mutate(starwars_small, height_m = height/100)
+starwars_small
+mutate(starwars_small, bmi = mass/(height_m^2))
+
+#to keep only the new columns, use transmute()
+
+# using aggregate functions
+mutate(starwars_small, proportional_mass = mass/sum(mass, na.rm = T))
 
 ```
