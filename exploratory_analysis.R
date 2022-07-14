@@ -26,6 +26,18 @@ names(spotify_ds)
 
 ?names()
 
-new_data <- sample_n(spotify_ds, 15)
+new_data <- select(spotify_ds, Song.Name, Artist, Streams, Popularity)
 new_data
-new_data <- select(new_data, Song.Name, Artist, Streams)
+arrange(new_data, desc(Streams))
+new_data <- head(new_data, 15)
+new_data
+View(new_data)
+
+ggplot(data = new_data, aes(x = Artist, y = Streams, color = Popularity)) + 
+  geom_bar(stat = "summary", fun = "mean") +
+  labs(title = "Spotify Top 200 List: Streams by Artist")
+
+
+
+
+

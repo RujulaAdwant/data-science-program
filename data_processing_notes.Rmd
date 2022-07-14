@@ -170,3 +170,65 @@ mutate(starwars_small, bmi = mass/(height_m^2))
 mutate(starwars_small, proportional_mass = mass/sum(mass, na.rm = T))
 
 ```
+
+### Summarizing and grouping data
+- works with both a z and an s
+
+`summarize()` collapses an entire column of data to a single value
+
+```{r}
+
+summarise(starwars, mean_mass = mean(mass, na.rm = T), mean_height = mean(height, na.rm = T))
+mutate(starwars, mean_mass = mean(mass, na.rm = T), mean_height = mean(height, na.rm = T))
+
+mean(starwars$mass, na.rm = T)
+
+species_mass <- summarize(group_by(starwars, species),
+          mean_mass = mean(mass, na.rm = T),
+          count = n())
+
+# the pipe operator %>%
+# function(x, y) is the same as x %>% function(y)
+# when using dplyr functions, you generally always use a dataset
+
+species_mass <- starwars %>%
+  group_by(species) %>%
+  summarize(mean_mass = mean(mass, na.rm = T),
+            count = n()) %>% arrange(desc(mean_mass)) #n() returns the number of values in each species
+species_mass
+arrange(species_mass, desc(mean_mass))
+```
+
+### Sampling a designated number of rows
+`sample_n()` allows us to sample a random number of rows from our dataset
+
+```{r}
+
+sample_n(starwars, 10)
+
+#10% of rows, selected randomly
+nrow(starwars) #total number of rows is 87
+sample_frac(starwars, 0.1) #gives 10 percent of the rows randomly
+starwars %>%
+  group_by(species) %>%
+  sample_n(1)
+```
+
+We can also take a "slice" of our dataset using `slice()` and its related set of functions
+retains order of rows in dataset
+```{r}
+
+slice(starwars, 50:60)
+
+slice_head(starwars, n = 10) # first 10 starwars rows by index
+slice_tail(starwars, n=10) #last 10 rows by index
+
+slice_min(starwars, order_by = mass, n=15)
+slice_max(starwars, order_by = mass, n= 10)
+
+# We can use select() to reorder columns
+select(starwars, species, everything())
+
+```
+
+
