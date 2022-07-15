@@ -231,4 +231,10 @@ select(starwars, species, everything())
 
 ```
 
+`Publisher == "Nintendo"` only returns columns that exactly match "Nintendo"
+
+`"Nintendo" %in% Publisher` returns columns that contain "Nintendo"
+
+a row with the value `"Nintendo, other company"` under `Publisher` will return `FALSE`
+when using `==` but will return TRUE when using `%in%` 
 
