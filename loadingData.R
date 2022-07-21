@@ -8,7 +8,7 @@ View(spotify_ds)
 #### Save R object as file ####
 
 
-
+filter(spo)
 
 
   
